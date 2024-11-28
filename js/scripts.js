@@ -1,5 +1,6 @@
 const counterTextElement = document.getElementById('counter-text');
 const buttonsElement = document.getElementById('buttons');
+const resetButtonElement = document.getElementById('reset-button');
 const inputPasswordElement = document.getElementById('input-password');
 const listElement = document.getElementById('list');
 
@@ -49,6 +50,10 @@ const updateTextCounter = () => {
   counterTextElement.textContent = counter;
 };
 
+const setDisabledButton = () => {
+  resetButtonElement.disabled = counter === 0;
+};
+
 const updateCounter = event => {
   const type = event.target.dataset.type;
   if (type === 'increment') {
@@ -60,6 +65,7 @@ const updateCounter = event => {
   }
 
   updateTextCounter();
+  setDisabledButton();
 };
 
 const changeWord = () => {
