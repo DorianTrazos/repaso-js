@@ -24,6 +24,17 @@ ul {
 }
 
 body {
-  margin: 0;
   font-family: sans-serif;
+}
+
+:root {
+  --color: black;
+}
+
+.ok {
+  color: green;
+}
+
+.error {
+  color: crimson;
 }
