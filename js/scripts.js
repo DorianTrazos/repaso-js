@@ -150,7 +150,7 @@ const printPasswordInfo = password => {
   }
 
   const numberOfSpecialCharacters = document.createElement('li');
-  numberOfSpecialCharacters.textContent = `El texto tiene ${amountOfSpecialCharacters} caracters especiales.`;
+  numberOfSpecialCharacters.textContent = `El texto tiene ${amountOfSpecialCharacters} caracteres especiales.`;
 
   if (amountOfSpecialCharacters > 1) {
     numberOfSpecialCharacters.classList.remove('error');
