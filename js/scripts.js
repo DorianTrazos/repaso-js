@@ -3,9 +3,10 @@ const buttonsElement = document.getElementById('buttons');
 const resetButtonElement = document.getElementById('reset-button');
 const inputPasswordElement = document.getElementById('input-password');
 const listElement = document.getElementById('list');
+const rootStyles = document.documentElement.style;
 
 const numbers = '123567890';
-const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const uppercaseCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const specialCharacters = '!@#$%^&*()-_=+[]{}|;:,.<>?';
 
 const words = [
@@ -73,29 +74,40 @@ const changeWord = () => {
   randomWordElement.textContent = words[randomNumber];
 };
 
-const getAmountOfSpecialCharactersInPassword = password => {
-  let amountOfSpecialCharacters = 0;
-  for (const character of password) {
-    if (specialCharacters.includes(character)) {
-      amountOfSpecialCharacters++;
-    }
+const changeTextColor = (value, minValue, element) => {
+  if (value > minValue) {
+    element.classList.add('ok');
+  } else {
+    element.classList.add('error');
   }
-
-  return amountOfSpecialCharacters;
 };
 
-const getAmountOfUppercaseInPassword = password => {
+const getPasswordLength = password => {
+  const charactersLength = document.createElement('li');
+  charactersLength.textContent = `El password tiene ${password.length} caracteres`;
+
+  changeTextColor(password.length, 5, charactersLength);
+
+  return charactersLength;
+};
+
+const getAmountUppercase = password => {
   let amountOfUppercase = 0;
   for (const character of password) {
-    if (uppercase.includes(character)) {
+    if (uppercaseCharacters.includes(character)) {
       amountOfUppercase++;
     }
   }
 
-  return amountOfUppercase;
+  const uppercaseText = document.createElement('li');
+  uppercaseText.textContent = `El password tiene ${amountOfUppercase} mayúsculas.`;
+
+  changeTextColor(amountOfUppercase, 0, uppercaseText);
+
+  return uppercaseText;
 };
 
-const getAmountOfNumbersInPassword = password => {
+const getAmountNumbers = password => {
   let amountOfNumbers = 0;
   for (const character of password) {
     if (numbers.includes(character)) {
@@ -103,71 +115,45 @@ const getAmountOfNumbersInPassword = password => {
     }
   }
 
-  return amountOfNumbers;
+  const numbersText = document.createElement('li');
+  numbersText.textContent = `El password tiene ${amountOfNumbers} números.`;
+
+  changeTextColor(amountOfNumbers, 0, numbersText);
+
+  return numbersText;
 };
 
-const areNumbersInPassword = password => {
-  return password.split('').some(character => numbers.includes(character));
+const getAmountSpecialCharacters = password => {
+  let amountOfSpecialCharacters = 0;
+  for (const character of password) {
+    if (specialCharacters.includes(character)) {
+      amountOfSpecialCharacters++;
+    }
+  }
+
+  const specialCharactersText = document.createElement('li');
+  specialCharactersText.textContent = `El password tiene ${amountOfSpecialCharacters} caracteres especiales.`;
+
+  changeTextColor(amountOfSpecialCharacters, 1, specialCharactersText);
+
+  return specialCharactersText;
 };
 
 const printPasswordInfo = password => {
-  const amountOfNumbers = getAmountOfNumbersInPassword(password);
-  const amountOfUppercase = getAmountOfUppercaseInPassword(password);
-  const amountOfSpecialCharacters = getAmountOfSpecialCharactersInPassword(password);
-
   const fragment = document.createDocumentFragment();
+  const passwordLengthText = getPasswordLength(password);
+  const amountUppercaseText = getAmountUppercase(password);
+  const amountNumbersText = getAmountNumbers(password);
+  const amountSpecialCharactersText = getAmountSpecialCharacters(password);
 
-  const newCharactersLength = document.createElement('li');
-  newCharactersLength.textContent = `El texto tiene ${password.length} caracteres`;
-
-  if (password.length > 5) {
-    newCharactersLength.classList.remove('error');
-    newCharactersLength.classList.add('ok');
-  } else {
-    newCharactersLength.classList.remove('ok');
-    newCharactersLength.classList.add('error');
-  }
-  const newAmountOfNumbers = document.createElement('li');
-  newAmountOfNumbers.textContent = `El texto tiene ${amountOfNumbers} números`;
-
-  if (amountOfNumbers > 0) {
-    newAmountOfNumbers.classList.remove('error');
-    newAmountOfNumbers.classList.add('ok');
-  } else {
-    newAmountOfNumbers.classList.remove('ok');
-    newAmountOfNumbers.classList.add('error');
-  }
-
-  const numberOfUppercase = document.createElement('li');
-  numberOfUppercase.textContent = `El texto tiene ${amountOfUppercase} mayúsculas`;
-
-  if (amountOfUppercase > 0) {
-    numberOfUppercase.classList.remove('error');
-    numberOfUppercase.classList.add('ok');
-  } else {
-    numberOfUppercase.classList.remove('ok');
-    numberOfUppercase.classList.add('error');
-  }
-
-  const numberOfSpecialCharacters = document.createElement('li');
-  numberOfSpecialCharacters.textContent = `El texto tiene ${amountOfSpecialCharacters} caracteres especiales.`;
-
-  if (amountOfSpecialCharacters > 1) {
-    numberOfSpecialCharacters.classList.remove('error');
-    numberOfSpecialCharacters.classList.add('ok');
-  } else {
-    numberOfSpecialCharacters.classList.remove('ok');
-    numberOfSpecialCharacters.classList.add('error');
-  }
-
-  fragment.append(newCharactersLength, numberOfUppercase, newAmountOfNumbers, numberOfSpecialCharacters);
+  fragment.append(passwordLengthText, amountUppercaseText, amountNumbersText, amountSpecialCharactersText);
 
   listElement.textContent = '';
   listElement.append(fragment);
 };
 
-const getUserPassword = event => {
-  const userPassword = event.target.value;
+const getUserPassword = () => {
+  const userPassword = inputPasswordElement.value;
   printPasswordInfo(userPassword);
 };
 
